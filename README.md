@@ -5,6 +5,6 @@ project to learn goolang
  - choose a option
  > 1 - start monitoring of sites
  > 
- > 2 - show logs of monitoring
+ > 2 - show monitoring logs
  > 
  > 3 - exit program

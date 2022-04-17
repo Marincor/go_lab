@@ -4,5 +4,7 @@ project to learn goolang
  - run command <code>go run main.go</code>
  - choose a option
  > 1 - start monitoring of sites
+ > 
  > 2 - show logs of monitoring
+ > 
  > 3 - exit program

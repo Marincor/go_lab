@@ -4,9 +4,11 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -22,6 +24,7 @@ func main() {
 			startMonitoring()
 		case 2:
 			fmt.Println("here are the logs:")
+			showLogs()
 		case 0:
 			fmt.Println("bye...")
 			os.Exit(0)
@@ -77,8 +80,10 @@ func siteTesting(site string) {
 	switch res.StatusCode {
 	case 200:
 		fmt.Println("Site:", site, "loading with success!")
+		registerLog(site, true)
 	default:
 		fmt.Println("Site", site, "with error, status code:", res.StatusCode)
+		registerLog(site, false)
 	}
 }
 
@@ -100,4 +105,27 @@ func readSitesTxt() []string {
 	}
 	file.Close()
 	return sites
+}
+
+func registerLog(site string, status bool) {
+	file, err := os.OpenFile("./sites_log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		fmt.Println("something is wrong, error: ", err)
+	}
+	timeFormat := "02/01/2006 15:04:05" /* dd/mm/yyyy hh:mm:ss */
+	timenow := time.Now().Format(timeFormat)
+	breakLine := "\n"
+
+	file.WriteString(timenow + " - " + "The site: " + site + "is online:" + strconv.FormatBool(status) + breakLine)
+
+	file.Close()
+}
+
+func showLogs() {
+	file, err := ioutil.ReadFile("./sites_log.txt")
+	if err != nil {
+		fmt.Println("shomething is wrong: ", err)
+	}
+	fmt.Println(string(file))
+
 }
